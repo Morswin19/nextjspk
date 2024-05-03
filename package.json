@@ -6,7 +6,7 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint"
+		"lint": "next lint --fix --dir src"
 	},
 	"dependencies": {
 		"@mdx-js/loader": "^3.0.1",
@@ -14,7 +14,7 @@
 		"@next/mdx": "^14.1.0",
 		"@tailwindcss/typography": "^0.5.10",
 		"@types/mdx": "^2.0.11",
-		"clsx": "^2.1.0",
+		"json-server": "1.0.0-alpha.23",
 		"lucide-react": "^0.344.0",
 		"next": "14.1.0",
 		"react": "^18",
@@ -28,10 +28,12 @@
 		"@typescript-eslint/eslint-plugin": "^6.21.0",
 		"@typescript-eslint/parser": "^6.21.0",
 		"autoprefixer": "^10.0.1",
+		"clsx": "^2.1.0",
 		"eslint": "^8",
 		"eslint-config-next": "14.1.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-import": "^2.29.1",
+		"msw": "^2.2.13",
 		"postcss": "^8",
 		"prettier": "^3.2.5",
 		"prettier-plugin-tailwindcss": "^0.5.11",

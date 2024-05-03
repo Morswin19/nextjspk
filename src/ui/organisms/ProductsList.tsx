@@ -1,16 +1,11 @@
-import { type Product } from "@/types/Product";
-import { ProductItem } from "@/ui/molecules/ProductItem";
+import { type GetProductsResponse } from "@/types/productTypes";
+import { ProductCard } from "@/ui/molecules/ProductCard";
 
-export function ProductsList({ products }: { products: Product[] }) {
+export async function ProductsList({ products }: { products: GetProductsResponse | undefined }) {
 	return (
 		<section>
-			<ul
-				data-testid="products-list"
-				className="mx-auto flex max-w-screen-xl flex-wrap gap-8"
-			>
-				{products.map((product) => (
-					<ProductItem key={product.id} product={product} />
-				))}
+			<ul className="m-auto flex max-w-screen-xl flex-wrap justify-center gap-8 gap-y-10 py-10">
+				{products?.data.map((product, index) => <ProductCard key={index} product={product} />)}
 			</ul>
 		</section>
 	);

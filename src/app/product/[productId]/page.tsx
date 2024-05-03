@@ -1,65 +1,54 @@
 import Image from "next/image";
 import { Suspense } from "react";
-import { type Metadata } from "next";
-import { getProductById, getProducts } from "@/api/products";
+import { getProductById, getProducts } from "@/api/controllers/products";
+import { type Products, type ProductType } from "@/types/productTypes";
+import { ProductCounter } from "@/ui/atoms/ProductCounter";
+import { TestServerComponent } from "@/ui/atoms/TestServerComponent";
+import { ProductsList } from "@/ui/organisms/ProductsList";
 import { SuggestedProducts } from "@/ui/organisms/SuggestedProducts";
-import { priceFormat } from "@/utils/priceFormat";
-
-export const generateMetadata = async ({
-	params,
-}: {
-	params: { productId: string };
-}): Promise<Metadata> => {
-	const product = await getProductById(params.productId);
-	return {
-		title: `${product.name}`,
-		description: `${product.description}`,
-	};
-};
+import { Loader } from "@/ui/molecules/Loader";
 
 export const generateStaticParams = async () => {
-	const products = await getProducts();
+	const products = (await getProducts()) as Products;
+
 	return products
 		.map((product) => ({
 			productId: product.id,
 		}))
-		.slice(0, 2);
+		.slice(0, 5);
 };
 
-export default async function SingleProductPage({
-	params,
-}: {
-	params: { productId: string };
-}) {
-	const product = await getProductById(params.productId);
+export default async function Product({ params }: { params: { productId: string } }) {
+	const product = (await getProductById(params.productId)) as ProductType;
+	const { id, image, price, name, short_desc, long_desc, category } = product || {};
 	return (
-		<main className="mx-auto my-10 max-w-screen-xl justify-center p-4">
-			<section>
-				<div className="flex justify-center gap-10">
+		<>
+			<main>
+				<div className="m-auto flex max-w-screen-xl flex-wrap justify-center gap-8 gap-y-10 py-10">
 					<Image
-						className="w-100 h-150 object-cover"
-						width={400}
-						height={600}
-						src={product.coverSrc}
-						alt={product.coverAlt}
+						src={`https://images.pexels.com/photos/133${image}/pexels-photo-133${image}.jpeg?auto=compress&cs=tinysrgb&w=800&lazy=load`}
+						alt={"test"}
+						width={500}
+						height={300}
+						className="aspect-[5/3] object-cover"
 					/>
-					<div className="max-w-xs">
-						<h1 className="mb-4 text-3xl">{product.name}</h1>
-						<p className="mb-16">{product.description}</p>
-						<p className="mb-4">Price: {priceFormat(product.price)}</p>
-						<button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">
-							Add to cart
-						</button>
+					<div>
+						<p>{name}</p>
+						<p>{price}</p>
+						<ProductCounter>
+							<TestServerComponent />
+						</ProductCounter>
+						<p>{short_desc}</p>
 					</div>
 				</div>
-				<p>{product.longDescription}</p>
-			</section>
-			<section className="mt-8">
-				<h2 className="mb-4 text-2xl">Proponowane produkty</h2>
-				<Suspense>
-					<SuggestedProducts />
+				<p className="m-auto flex max-w-screen-md flex-wrap justify-center gap-8 gap-y-10 py-10">
+					{long_desc}
+				</p>
+				<ProductsList products={[product]} />
+				<Suspense fallback={<Loader />}>
+					<SuggestedProducts category={category} id={id} />
 				</Suspense>
-			</section>
-		</main>
+			</main>
+		</>
 	);
 }

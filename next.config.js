@@ -1,15 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	pageExtensions: ["ts", "tsx", "mdx"],
+	pageExtensions: ["ts", "tsx"],
 	experimental: {
 		typedRoutes: true,
-		mdxRs: true,
 	},
 	images: {
-		domains: ["naszsklep-api.vercel.app"],
+		domains: [
+			"naszsklep-api.vercel.app",
+			"v1.tailwindcss.com",
+			"images.pexels.com",
+			"rockserwis.fm",
+		],
 	},
 };
 
-const withMDX = require("@next/mdx")();
-module.exports = withMDX(nextConfig);
+// const withMDX = require("@next/mdx")();
+// module.exports = withMDX(nextConfig);
 module.exports = nextConfig;
